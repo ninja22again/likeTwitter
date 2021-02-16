@@ -4,6 +4,8 @@ import sys
 import json
 
 from django.http import JsonResponse
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from app.models import Tweet
@@ -18,6 +20,8 @@ class TweetActionHandler(APIView):
 
     def __init__(self):
         super(TweetActionHandler, self).__init__()
+        authentication_classes = (TokenAuthentication,)
+        permission_classes = (IsAuthenticated,)
         self._logger = logging.getLogger('django')
         self._response_data = {
             "status": 0,

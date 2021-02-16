@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -13,6 +15,7 @@ from app.serializers.UserGetResponseSerializer import UserGetResponseSerializer
 from app.serializers.UserPostRequestSerializer import UserPostRequestSerializer
 
 
+
 class UserManagementHandler(APIView):
     """
     User Management Handler Class
@@ -20,7 +23,9 @@ class UserManagementHandler(APIView):
 
     def __init__(self):
         super(UserManagementHandler, self).__init__()
-        self._logger = logging.getLogger()
+        authentication_classes = (TokenAuthentication,)
+        permission_classes = (IsAuthenticated,)
+        self._logger = logging.getLogger('django')
 
     # def _process_validation_error_response(self, validation_error):
 
@@ -48,7 +53,6 @@ class UserManagementHandler(APIView):
             self._logger.error("\n{0} \n {1} \n".format(type(err), traceback.format_exc()))
             return str(err)
 
-
     def get(self, request):
         """
         # Get the details about the user if user exists in the system.
@@ -66,7 +70,9 @@ class UserManagementHandler(APIView):
         request_serializer: app.serializers.UserGetRequestSerializer.UserGetRequestSerializer
         response_serializer: app.serializers.UserGetRequestSerializer.UserGetRequestSerializer
         """
+
         serializer = UserGetRequestSerializer(data=request.query_params)
+
         if not serializer.is_valid():
             return JsonResponse({
                 'data': {
