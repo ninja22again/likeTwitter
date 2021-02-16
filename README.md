@@ -1,3 +1,8 @@
+## Docker Instantiation
+- docker-compose up --build -d
+- docker-compose up
+### service can be invoked on localhost 8000 .
+
 ## likeTwitter
 
 ### Twitter like API Application in django using djangorestframework
